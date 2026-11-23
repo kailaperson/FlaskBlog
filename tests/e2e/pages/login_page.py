@@ -18,7 +18,7 @@ class LoginPage(BasePage):
         self.password_input = 'input[name="password"]'
         self.submit_button = 'button[type="submit"]'
         self.csrf_token = 'input[name="csrf_token"]'
-        self.forgot_password_link = 'a[href*="password_reset"]'
+        self.forgot_password_link = 'a[href*="password-reset"]'
 
     def navigate(self, path: str = "/login/redirect=&"):
         """Navigate to the login page."""

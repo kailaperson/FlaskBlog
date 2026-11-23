@@ -6,6 +6,7 @@ import pytest
 
 from tests.e2e.pages.login_page import LoginPage
 from tests.e2e.pages.navbar_component import NavbarComponent
+from tests.e2e.pages.password_reset_page import PasswordResetPage
 
 
 class TestLoginPageRendering:
@@ -32,6 +33,22 @@ class TestLoginPageRendering:
         login_page = LoginPage(page, flask_server["base_url"])
         login_page.navigate()
         login_page.expect_has_forgot_password_link()
+
+    @pytest.mark.auth
+    def test_forgot_password_link_opens_password_reset_page(self, page, flask_server):
+        """Test that forgot password link opens the password reset page."""
+        login_page =LoginPage(page, flask_server["base_url"])
+        login_page.navigate()
+        
+        #click the real Forgot Password Link
+        page.locator(login_page.forgot_password_link).click()
+        #reaches the correct password reset url 
+        page.wait_for_url("**/password-reset/codesent=false",timeout=5000)
+        #makes sure form is visible 
+        reset_page = PasswordResetPage(page,flask_server["base_url"])
+        assert page.locator(reset_page.username_input).is_visible()
+        assert page.locator(reset_page.email_input).is_visible()
+
 
     @pytest.mark.auth
     def test_login_page_title(self, page, flask_server):
